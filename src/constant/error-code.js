@@ -5,6 +5,9 @@ const ERROR_CODE = {
   AMOUNT_REQUIRED: {
     message: "Amount Required",
   },
+  TYPE_REQUIRED: {
+    message: "Type Required",
+  },
   DESC_REQUIRED: {
     message: "ENTER_DESCRIPTION",
   },

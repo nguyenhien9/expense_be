@@ -2,8 +2,8 @@ const expenseServices = require("../services/expense.services");
 
 const get = async (req, res, next) => {
   try {
-    const filters = req.query;
-    const result = await expenseServices.getAllExpense(filters);
+    // const filters = req.query;
+    const result = await expenseServices.getAllExpense();
     res.json(result);
   } catch (error) {
     next(error);
@@ -33,7 +33,7 @@ const remove = async (req, res, next) => {
   try {
     const deleteId = req.params.id;
     await expenseServices.deleteExpense(deleteId);
-    res.json({ message: "deleted" });
+    res.json({ id: deleteId, message: "deleted" });
   } catch (error) {
     next(error);
   }
