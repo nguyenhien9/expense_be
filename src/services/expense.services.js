@@ -1,29 +1,50 @@
 const mongoose = require("mongoose");
 const ERROR_CODE = require("../constant/error-code");
 const { ExpenseModel } = require("../models/expense.models");
-const DEFAULT_SKIP = 0;
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 8;
+require("dotenv").config();
 
-const getAllExpense = async () => {
-  // let skip = DEFAULT_SKIP;
-  // let limit = DEFAULT_LIMIT;
-  // if (filters.skip) {
-  //   skip = filters.skip;
-  // }
-  // if (filters.limit) {
-  //   limit = filters.limit;
-  // }
-  // const query = {};
-  // if (filters.title) {
-  //   query.title = filters.title;
-  // }
-  // if (filters.amount) {
-  //   query.amount = filters.amount;
-  // }
+const getAllExpense = async (filters) => {
+  const sortField = filters.sort;
+  let limit = DEFAULT_LIMIT;
+  let page = parseInt(filters.page) || 1;
+  const sortOptions = {};
+  switch (sortField) {
+    case "Latest":
+      sortOptions.date = -1;
+      break;
+    case "Oldest":
+      sortOptions.date = 1;
+      break;
+    case "Largest":
+      sortOptions.amount = -1;
+      break;
+    case "Smallest":
+      sortOptions.amount = 1;
+      break;
+    default:
+      sortOptions.date = 1;
+  }
 
-  const expenses = await ExpenseModel.find().sort({ date: 1 });
+  const query = {};
+  if (filters.title) {
+    query.$text = { $search: filters.title };
+  }
 
-  return expenses;
+  if (filters.type && filters.type !== "All") {
+    query.type = filters.type;
+  }
+
+  const totalExpenses = await ExpenseModel.countDocuments();
+  console.log("@@@totalExpenses", totalExpenses);
+  const totalPages = Math.ceil(totalExpenses / limit);
+  console.log("@@@totalPages", totalPages);
+  const expenses = await ExpenseModel.find(query)
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort(sortOptions);
+
+  return { page, per_page: limit, totalExpenses, totalPages, expenses };
 };
 const createExpense = async (dto) => {
   // if (!dto.title) {

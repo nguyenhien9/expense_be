@@ -2,8 +2,8 @@ const expenseServices = require("../services/expense.services");
 
 const get = async (req, res, next) => {
   try {
-    // const filters = req.query;
-    const result = await expenseServices.getAllExpense();
+    const filters = req.query;
+    const result = await expenseServices.getAllExpense(filters);
     res.json(result);
   } catch (error) {
     next(error);

@@ -4,6 +4,7 @@ const expenseSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      minLength: 4,
       maxLength: 20,
     },
     amount: {
@@ -26,16 +27,17 @@ const expenseSchema = new mongoose.Schema(
     desc: {
       type: String,
       required: true,
+      minLength: 4,
       maxLength: 50,
     },
   },
   {
     timestamps: {
       createdAt: "created_at",
-      updatedAt: "updated_at",
+      updatedAt: false,
     },
   }
-);
+).index({ title: "text" });
 
 const expenseModel = mongoose.model("Expense", expenseSchema);
 
