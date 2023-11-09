@@ -1,4 +1,4 @@
-const expenseServices = require("../services/expense.services");
+const expenseServices = require("../services/expense.service");
 
 const get = async (req, res, next) => {
   try {
@@ -38,9 +38,19 @@ const remove = async (req, res, next) => {
     next(error);
   }
 };
+const showReport = async (req, res, next) => {
+  try {
+    const filters = req.query;
+    const result = await expenseServices.showReport(filters);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   get,
   create,
   update,
   remove,
+  showReport,
 };

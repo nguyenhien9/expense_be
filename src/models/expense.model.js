@@ -23,12 +23,13 @@ const expenseSchema = new mongoose.Schema(
     date: {
       type: Date,
       default: Date.now,
+      required: true,
     },
     desc: {
       type: String,
       required: true,
       minLength: 4,
-      maxLength: 50,
+      maxLength: 20,
     },
   },
   {

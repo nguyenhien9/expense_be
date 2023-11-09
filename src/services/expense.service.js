@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const ERROR_CODE = require("../constant/error-code");
-const { ExpenseModel } = require("../models/expense.models");
-const DEFAULT_LIMIT = 8;
+
+const { ExpenseModel } = require("../models/expense.model");
+const DEFAULT_LIMIT = 4;
 require("dotenv").config();
 
 const getAllExpense = async (filters) => {
@@ -36,9 +36,9 @@ const getAllExpense = async (filters) => {
   }
 
   const totalExpenses = await ExpenseModel.countDocuments();
-  console.log("@@@totalExpenses", totalExpenses);
+
   const totalPages = Math.ceil(totalExpenses / limit);
-  console.log("@@@totalPages", totalPages);
+
   const expenses = await ExpenseModel.find(query)
     .skip((page - 1) * limit)
     .limit(limit)
@@ -73,9 +73,80 @@ const deleteExpense = async (id) => {
   await ExpenseModel.findByIdAndDelete(id);
 };
 
+const showReport = async (filters) => {
+  const dateFilters = {};
+
+  if (filters.startDate) {
+    dateFilters.startDate = new Date(filters.startDate);
+  }
+  if (filters.endDate) {
+    dateFilters.endDate = new Date(filters.endDate);
+  }
+
+  const expenses = await ExpenseModel.find({
+    date: {
+      $gte: dateFilters.startDate,
+      $lte: dateFilters.endDate,
+    },
+  });
+
+  let expenseAmount = 0;
+  let incomeAmount = 0;
+
+  const totalExpense = await ExpenseModel.aggregate([
+    {
+      $match: {
+        type: "Expense",
+        date: {
+          $gte: dateFilters.startDate,
+          $lte: dateFilters.endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        amount: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  if (totalExpense.length > 0) {
+    expenseAmount = totalExpense[0].amount;
+  }
+  const totalIncome = await ExpenseModel.aggregate([
+    {
+      $match: {
+        type: "Income",
+        date: {
+          $gte: dateFilters.startDate,
+          $lte: dateFilters.endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        amount: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  if (totalIncome.length > 0) {
+    incomeAmount = totalIncome[0].amount;
+  }
+
+  return {
+    totalExpense: expenseAmount,
+    totalIncome: incomeAmount,
+    expenses,
+  };
+};
+
 module.exports = {
   getAllExpense,
   createExpense,
   updateExpense,
   deleteExpense,
+  showReport,
 };
