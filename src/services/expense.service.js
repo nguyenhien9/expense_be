@@ -88,7 +88,7 @@ const showReport = async (filters) => {
       $gte: dateFilters.startDate,
       $lte: dateFilters.endDate,
     },
-  });
+  }).sort({ date: 1 });
 
   let expenseAmount = 0;
   let incomeAmount = 0;
