@@ -11,9 +11,7 @@ const dbName = process.env.dbName;
 const app = express();
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://ngnghien5588:nguyenngochien@cluster0.f3ggmfp.mongodb.net/CSTP03"
-);
+mongoose.connect(`${url}/${dbName}`);
 mongoose.connection.on("open", () => {
   console.log("Connect to database successfully");
 });
@@ -23,6 +21,6 @@ mongoose.connection.on("error", () => {
 app.use(bodyParser.json());
 app.use(expenseRoute);
 
-app.listen(3000, () => {
-  console.log(`Listening port : 3000`);
+app.listen(port, () => {
+  console.log(`Listening port : ${port}`);
 });
