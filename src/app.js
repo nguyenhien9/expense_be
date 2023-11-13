@@ -11,7 +11,9 @@ const dbName = process.env.dbName;
 const app = express();
 app.use(cors());
 
-mongoose.connect(`${url}/${dbName}`);
+mongoose.connect(
+  "mongodb+srv://ngnghien5588:nguyenngochien@cluster0.f3ggmfp.mongodb.net/CSTP03"
+);
 mongoose.connection.on("open", () => {
   console.log("Connect to database successfully");
 });
