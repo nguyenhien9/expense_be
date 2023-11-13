@@ -23,6 +23,6 @@ mongoose.connection.on("error", () => {
 app.use(bodyParser.json());
 app.use(expenseRoute);
 
-app.listen(port, () => {
-  console.log(`Listening port : ${port}`);
+app.listen(3000, () => {
+  console.log(`Listening port : 3000`);
 });
