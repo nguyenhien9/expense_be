@@ -1,26 +1,35 @@
 const ERROR_CODE = require("../constant/error-code");
 
 const modelValidate = (req, res, next) => {
-  const data = req.body;
-  const ERROR = [];
+  const { title, amount, desc } = req.body;
 
-  if (!data.title || !data.amount || !data.desc) {
-    ERROR.push(ERROR_CODE.FIELD_REQUIRED.code);
+  if (!title || !amount || !desc) {
+    return res.status(400).json({
+      success: false,
+      code: ERROR_CODE.FIELD_REQUIRED.code,
+      message: ERROR_CODE.FIELD_REQUIRED.message,
+    });
   }
-  if (data.title.length < 4 || data.title.length > 20) {
-    ERROR.push(ERROR_CODE.TITLE_INVALID.code);
+  if (title.length < 4 || title.length > 20) {
+    return res.status(400).json({
+      success: false,
+      code: ERROR_CODE.TITLE_INVALID.code,
+      message: ERROR_CODE.TITLE_INVALID.message,
+    });
   }
-
-  if (data.amount < 100) {
-    ERROR.push(ERROR_CODE.AMOUNT_INVALID.code);
+  if (amount < 100) {
+    return res.status(400).json({
+      success: false,
+      code: ERROR_CODE.AMOUNT_INVALID.code,
+      message: ERROR_CODE.AMOUNT_INVALID.message,
+    });
   }
-
-  if (data.desc.length < 4 || data.desc.length > 20) {
-    ERROR.push(ERROR_CODE.DESC_INVALID.code);
-  }
-
-  if (ERROR.length > 0) {
-    return res.status(400).json({ errors: ERROR });
+  if (desc.length < 4 || desc.length > 20) {
+    return res.status(400).json({
+      success: false,
+      code: ERROR_CODE.DESC_INVALID.code,
+      message: ERROR_CODE.DESC_INVALID.message,
+    });
   }
 
   next();

@@ -10,11 +10,10 @@ const expenseSchema = new mongoose.Schema(
     amount: {
       type: Number,
       required: true,
-      min: 0,
+      min: 100,
     },
     type: {
       type: String,
-      required: true,
       enum: {
         values: ["Expense", "Income"],
         message: "{VALUE} is not supported",
@@ -23,7 +22,6 @@ const expenseSchema = new mongoose.Schema(
     date: {
       type: Date,
       default: Date.now,
-      required: true,
     },
     desc: {
       type: String,

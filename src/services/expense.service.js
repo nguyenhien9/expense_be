@@ -47,18 +47,6 @@ const getAllExpense = async (filters) => {
   return { page, per_page: limit, totalExpenses, totalPages, expenses };
 };
 const createExpense = async (dto) => {
-  // if (!dto.title) {
-  //   throw new Error(ERROR_CODE.TITLE_REQUIRED.message);
-  // }
-  // if (!dto.amount) {
-  //   throw new Error(ERROR_CODE.AMOUNT_REQUIRED.message);
-  // }
-  // if (!dto.desc) {
-  //   throw new Error(ERROR_CODE.DESC_REQUIRED.message);
-  // }
-  // if (!dto.type) {
-  //   throw new Error(ERROR_CODE.TYPE_REQUIRED.message);
-  // }
   return await ExpenseModel.create({ ...dto });
 };
 const updateExpense = async (id, dto) => {
