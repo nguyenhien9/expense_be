@@ -23,7 +23,7 @@ const getAllExpense = async (filters) => {
       sortOptions.amount = 1;
       break;
     default:
-      sortOptions.date = 1;
+      sortOptions.date = -1;
   }
 
   const query = {};
@@ -43,8 +43,7 @@ const getAllExpense = async (filters) => {
     .skip((page - 1) * limit)
     .limit(limit)
     .sort(sortOptions);
-
-  return { page, per_page: limit, totalExpenses, totalPages, expenses };
+  return { page, perPage: limit, totalExpenses, totalPages, expenses };
 };
 const createExpense = async (dto) => {
   return await ExpenseModel.create({ ...dto });

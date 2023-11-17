@@ -14,6 +14,7 @@ const expenseSchema = new mongoose.Schema(
     },
     type: {
       type: String,
+      required: true,
       enum: {
         values: ["Expense", "Income"],
         message: "{VALUE} is not supported",
