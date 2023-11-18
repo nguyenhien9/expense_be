@@ -35,7 +35,7 @@ const getAllExpense = async (filters) => {
     query.type = filters.type;
   }
 
-  const totalExpenses = await ExpenseModel.countDocuments();
+  const totalExpenses = await ExpenseModel.countDocuments({ maxTimeNs: 30000 });
 
   const totalPages = Math.ceil(totalExpenses / limit);
 
